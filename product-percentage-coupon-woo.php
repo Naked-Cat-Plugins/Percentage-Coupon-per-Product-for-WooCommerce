@@ -9,7 +9,7 @@
  * Text Domain:          product-percentage-coupon-woo
  * Requires at least:    5.8
  * Tested up to:         6.9
- * Requires PHP:         7.2
+ * Requires PHP:         7.4
  * WC requires at least: 7.1
  * WC tested up to:      9.9
  * Requires Plugins:     woocommerce

@@ -3,7 +3,7 @@ Contributors: nakedcatplugins, webdados
 Tags: woocommerce, coupon, discount, marketing
 Requires at least: 5.8
 Tested up to: 6.9
-Requires PHP: 7.2
+Requires PHP: 7.4
 Stable tag: 1.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -70,6 +70,7 @@ Sure. Go to [GlotPress](https://translate.wordpress.org/projects/wp-plugins/prod
 * [FIX] Percentages with decimals set on a product or variation, such as 12,5%, lost their decimals on shops that use a comma as the decimal separator
 * [FIX] Products set to “No” for a coupon no longer count towards it, so they can’t use up its “Limit usage to X items” allowance, and a cart with only those products is told the coupon doesn’t apply
 * [FIX] Magic URL Coupon for WooCommerce integration: when the coupon’s own discount is 0%, products without a percentage of their own are no longer treated as eligible for it
+* [DEV] Requires PHP 7.4
 
 = 1.3 - 2025-06-13 =
 * [NEW] We are now called Naked Cat Plugins 😻
