@@ -1,0 +1,23 @@
+# Operative system files
+*.DS_Store*
+*__MACOSX*
+
+# Tooling files
+*.git*
+*.github*
+*.wordpress-org*
+*.svn*
+*.claude*
+*.distignore*
+*.gitignore*
+*phpcs.xml*
+*node_modules*
+*package.json*
+*package-lock.json*
+*tests*
+
+# Local ZIP creation tool
+*createzip.command*
+
+# Other files specific to the plugin
+*todo.txt*

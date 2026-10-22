@@ -30,6 +30,7 @@ You can also set the specific discount at the product variation level (defaults 
 
 Already know our other WooCommerce (premium) plugins?
 
+* [EU Guarantee Notice and GARAN Label for WordPress and WooCommerce](https://nakedcatplugins.com/product/eu-guarantee-notice-and-garan-label-for-wordpress-and-woocommerce/) - Show the mandatory EU guarantee notice and the EU GARAN label with the official European Commission artwork, and let Proof of Notice check every day that the notice is still on your site
 * [Shop as Client for WooCommerce](https://nakedcatplugins.com/product/shop-as-client-for-woocommerce-pro-add-on/) - Quickly create orders on behalf of your customers
 * [Taxonomy/Term and Role based Discounts for WooCommerce](https://nakedcatplugins.com/product/taxonomy-term-and-role-based-discounts-for-woocommerce-pro-add-on/) - Easily create bulk discount rules for products based on any taxonomy terms (built-in or custom)
 * [Simple WooCommerce Order Approval](https://nakedcatplugins.com/product/simple-woocommerce-order-approval/) - The hassle-free solution for WooCommerce order approval before payment
@@ -52,7 +53,7 @@ This is a free plugin. It’s our way of giving back to the wonderful WordPress 
 
 There’s a support tab on the top of this page, where you can ask the community for help. We’ll try to keep an eye on the forums but we cannot promise to answer support tickets.
 
-If you reach us by email or any other direct contact means, we’ll assume you need, premium, and of course, paid-for support.
+If you reach us by email or any other direct contact method, we’ll assume you need premium, paid-for support.
 
 = Where do I report security vulnerabilities found in this plugin? =  
  
@@ -63,6 +64,12 @@ You can report any security bugs found in the source code of this plugin through
 Sure. Go to [GlotPress](https://translate.wordpress.org/projects/wp-plugins/product-percentage-coupon-woo) and help us out.
 
 == Changelog ==
+
+= TBA =
+* [TWEAK] Faster product editing, and less data stored for each product, when the shop has many “Percentage discount (per product)” coupons
+* [FIX] Percentages with decimals set on a product or variation, such as 12,5%, lost their decimals on shops that use a comma as the decimal separator
+* [FIX] Products set to “No” for a coupon no longer count towards it, so they can’t use up its “Limit usage to X items” allowance, and a cart with only those products is told the coupon doesn’t apply
+* [FIX] Magic URL Coupon for WooCommerce integration: when the coupon’s own discount is 0%, products without a percentage of their own are no longer treated as eligible for it
 
 = 1.3 - 2025-06-13 =
 * [NEW] We are now called Naked Cat Plugins 😻

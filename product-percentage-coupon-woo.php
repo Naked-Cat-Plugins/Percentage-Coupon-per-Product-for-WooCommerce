@@ -25,18 +25,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+// Keep in sync with the "Version" and "WC requires at least" headers above
+define( 'PCPW_VERSION', '1.3' );
+define( 'PCPW_WC_REQ_VERSION', '7.1' );
+
 /**
  * Add plugin initialization hook.
  *
  * @return void
  */
 function woo_product_percentage_coupon_init() {
-	if ( ! function_exists( 'get_plugin_data' ) ) {
-		include ABSPATH . '/wp-admin/includes/plugin.php';
-	}
-	$plugin_data = get_plugin_data( __FILE__ );
-	define( 'PCPW_VERSION', $plugin_data['Version'] );
-	define( 'PCPW_WC_REQ_VERSION', $plugin_data['WC requires at least'] );
 	load_plugin_textdomain( 'product-percentage-coupon-woo' );
 	if ( class_exists( 'WooCommerce' ) && defined( 'WC_VERSION' ) && version_compare( WC_VERSION, PCPW_WC_REQ_VERSION, '>=' ) ) {
 		require_once __DIR__ . '/includes/class-woo-product-percentage-coupon.php';
