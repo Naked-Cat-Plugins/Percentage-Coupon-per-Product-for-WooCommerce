@@ -1,0 +1,19 @@
+/* Percentage Coupon per Product for WooCommerce: product data tab and variation fields */
+#woocommerce-product-data ul.wc-tabs li.product_percentage_coupon_options a::before,
+.product_percentage_coupon_plugin_title::before {
+	font-family: Dashicons;
+	speak: none;
+	font-weight: 400;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	content: "\f323";
+	text-decoration: none;
+}
+.product_percentage_coupon_variation_fields .form-field input {
+	width: auto !important;
+}
+.product_percentage_coupon_woo_amount_variable_field {
+	display: none;
+}

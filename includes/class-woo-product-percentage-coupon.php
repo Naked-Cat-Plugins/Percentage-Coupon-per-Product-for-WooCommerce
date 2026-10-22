@@ -466,54 +466,9 @@ final class Woo_Product_Percentage_Coupon {
 		if ( ! $screen || 'product' !== $screen->id || ! wp_script_is( 'wc-admin-product-meta-boxes', 'enqueued' ) ) {
 			return;
 		}
-		wp_add_inline_script(
-			'wc-admin-product-meta-boxes',
-			<<<'JS'
-jQuery( function( $ ) {
-	function product_percentage_coupon_hide_fields() {
-		$( '.product_percentage_coupon_woo_active' ).each( function() {
-			var id = $( this ).attr( 'id' );
-			var perc_id = id.replace( '_active_', '_amount_' );
-			if ( $( this ).val() == 'yes' ) {
-				$( '.'+perc_id+'_field' ).show();
-			} else {
-				$( '.'+perc_id+'_field' ).hide();
-			}
-		} );
-	}
-	product_percentage_coupon_hide_fields();
-	$( document ).on( 'change', '.product_percentage_coupon_woo_active', function() {
-		product_percentage_coupon_hide_fields();
-	} );
-	$( '#woocommerce-product-data' ).on( 'woocommerce_variations_loaded', function() {
-		product_percentage_coupon_hide_fields();
-	} );
-} );
-JS
-		);
-		wp_add_inline_style(
-			'woocommerce_admin_styles',
-			<<<'CSS'
-#woocommerce-product-data ul.wc-tabs li.product_percentage_coupon_options a::before,
-.product_percentage_coupon_plugin_title::before {
-	font-family: Dashicons;
-	speak: none;
-	font-weight: 400;
-	font-variant: normal;
-	text-transform: none;
-	line-height: 1;
-	-webkit-font-smoothing: antialiased;
-	content: "\f323";
-	text-decoration: none;
-}
-.product_percentage_coupon_variation_fields .form-field input {
-	width: auto !important;
-}
-.product_percentage_coupon_woo_amount_variable_field {
-	display: none;
-}
-CSS
-		);
+		$plugin_url = plugin_dir_url( __DIR__ );
+		wp_enqueue_script( 'product-percentage-coupon-woo-admin', $plugin_url . 'assets/js/admin-product.js', array( 'jquery', 'wc-admin-product-meta-boxes' ), $this->version, true );
+		wp_enqueue_style( 'product-percentage-coupon-woo-admin', $plugin_url . 'assets/css/admin-product.css', array( 'woocommerce_admin_styles' ), $this->version );
 	}
 
 	/**
