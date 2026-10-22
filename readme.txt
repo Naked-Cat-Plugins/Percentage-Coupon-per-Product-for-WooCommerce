@@ -68,7 +68,7 @@ Sure. Go to [GlotPress](https://translate.wordpress.org/projects/wp-plugins/prod
 = TBA =
 * [TWEAK] Faster product editing, and less data stored for each product, when the shop has many “Percentage discount (per product)” coupons
 * [FIX] Percentages with decimals set on a product or variation, such as 12,5%, lost their decimals on shops that use a comma as the decimal separator
-* [FIX] Products set to “No” for a coupon no longer count towards it, so they can’t use up its “Limit usage to X items” allowance, and a cart with only those products is told the coupon doesn’t apply
+* [FIX] Products set to “No” for a coupon no longer count towards it, so they can’t use up its “Limit usage to X items” allowance, and a cart with only those products is told the coupon doesn’t apply (if the coupon also gives free shipping, those carts no longer get it)
 * [FIX] Magic URL Coupon for WooCommerce integration: when the coupon’s own discount is 0%, products without a percentage of their own are no longer treated as eligible for it
 * [DEV] Requires PHP 7.4
 
