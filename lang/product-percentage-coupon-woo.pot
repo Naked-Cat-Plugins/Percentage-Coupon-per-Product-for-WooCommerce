@@ -1,0 +1,127 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Product Percentage Coupon Woo\n"
+"POT-Creation-Date: 2025-06-13 17:59+0100\n"
+"PO-Revision-Date: 2020-08-06 12:48+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"X-Generator: Poedit 3.6\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: product-percentage-coupon-woo.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: "
+"__;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.min.js\n"
+
+#: includes/class-woo-product-percentage-coupon.php:104
+msgid "Percentage discount (per product)"
+msgstr ""
+
+#: includes/class-woo-product-percentage-coupon.php:137
+msgid ""
+"A “Percentage discount (per product)” coupon works just like a regular "
+"“Percentage discount” coupon, setting the default discount at the percentage "
+"set on this page, but applies a custom discount if you set it on each "
+"product."
+msgstr ""
+
+#: includes/class-woo-product-percentage-coupon.php:359
+#: includes/class-woo-product-percentage-coupon.php:574
+msgid "Percentage discount coupons"
+msgstr ""
+
+#: includes/class-woo-product-percentage-coupon.php:379
+msgid ""
+"The fields below are used to set custom percentage discounts for “Percentage "
+"discount (per product)” coupons <span class=\"show_if_variable\">and might "
+"be overridden at the variations settings</span>"
+msgstr ""
+
+#: includes/class-woo-product-percentage-coupon.php:390
+#: includes/class-woo-product-percentage-coupon.php:588
+msgid "Activate coupon discount (%)"
+msgstr ""
+
+#: includes/class-woo-product-percentage-coupon.php:392
+#: includes/class-woo-product-percentage-coupon.php:425
+#: includes/class-woo-product-percentage-coupon.php:591
+#: includes/class-woo-product-percentage-coupon.php:629
+msgid "Yes"
+msgstr ""
+
+#: includes/class-woo-product-percentage-coupon.php:393
+#: includes/class-woo-product-percentage-coupon.php:426
+msgid "No"
+msgstr ""
+
+#: includes/class-woo-product-percentage-coupon.php:401
+#: includes/class-woo-product-percentage-coupon.php:601
+msgid "Coupon discount (%)"
+msgstr ""
+
+#: includes/class-woo-product-percentage-coupon.php:402
+#: includes/class-woo-product-percentage-coupon.php:602
+msgid "Coupon default"
+msgstr ""
+
+#. translators: %s is the coupon code
+#: includes/class-woo-product-percentage-coupon.php:421
+#: includes/class-woo-product-percentage-coupon.php:624
+#, php-format
+msgid "Activate “%s” discount (%%)"
+msgstr ""
+
+#. translators: %s is the coupon code
+#: includes/class-woo-product-percentage-coupon.php:436
+#: includes/class-woo-product-percentage-coupon.php:641
+#, php-format
+msgid "“%s” discount (%%)"
+msgstr ""
+
+#: includes/class-woo-product-percentage-coupon.php:450
+#: includes/class-woo-product-percentage-coupon.php:657
+msgid "There are no “Percentage discount (per product)” coupons yet."
+msgstr ""
+
+#: includes/class-woo-product-percentage-coupon.php:577
+msgid ""
+"The fields below are used to set custom percentage discounts for “Percentage "
+"discount (per product)” coupons and will override the product level settings"
+msgstr ""
+
+#: includes/class-woo-product-percentage-coupon.php:590
+#: includes/class-woo-product-percentage-coupon.php:628
+msgid "No (inherit from product)"
+msgstr ""
+
+#. translators: %s is the required WooCommerce version
+#: product-percentage-coupon-woo.php:72
+#, php-format
+msgid ""
+"<strong>Percentage Coupon per Product for WooCommerce</strong> is installed "
+"and active but <strong>WooCommerce (%s or above)</strong> is not."
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Percentage Coupon per Product for WooCommerce"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Create WooCommerce coupons with variable discount percentage per product"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Naked Cat Plugins (by Webdados)"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://nakedcatplugins.com"
+msgstr ""
