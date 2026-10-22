@@ -1,17 +1,9 @@
 name: Plugin Asset/Readme Update
 
 on:
-  push:
-    branches:
-    - main
-    paths:
-      # Any change on the WordPress.org plugin repository-specific assets that belong in the top-level assets directory.
-      - '.wordpress-org/**'
-      # The readme.txt.
-      # - 'readme.txt'
-      # Changes to workflow files should always verify all workflows are successful.
-      - '.github/workflows/*.yml'
-  # Allows you to run this workflow manually from the Actions tab.
+  # Manual only, from the Actions tab. Every run also copies readme.txt to SVN trunk and to the
+  # stable tag, which is what the WordPress.org plugin page shows, so an unreleased changelog
+  # (= TBA =) on main must never go out on a push.
   workflow_dispatch:
 
 jobs:
