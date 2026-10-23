@@ -5,6 +5,7 @@
  *     wp eval-file tests/e2e/fixtures.php create   Prints the fixtures as JSON
  *     wp eval-file tests/e2e/fixtures.php order <order_id>   Prints an order's discounts as JSON
  *     wp eval-file tests/e2e/fixtures.php product-meta <product_id> <coupon_id>   Prints the product's meta for that coupon as JSON
+ *     wp eval-file tests/e2e/fixtures.php coupon-meta <coupon_id>   Prints the coupon's plugin setting as JSON
  *     wp eval-file tests/e2e/fixtures.php reset-cart   Empties the test customer's saved cart
  *     wp eval-file tests/e2e/fixtures.php delete   Deletes everything "create" made, plus the test users' orders
  *
@@ -120,6 +121,11 @@ switch ( $ppcw_e2e_args[0] ?? '' ) {
 		ppcw_e2e_delete();
 		$coupon        = ppcw_e2e_coupon( 'ppcw-e2e', '10' );
 		$coupon_nosale = ppcw_e2e_coupon( 'ppcw-e2e-nosale', '10', true );
+		// Set to "Refuse without discount"
+		$coupon_refuse = ppcw_e2e_coupon( 'ppcw-e2e-refuse', '10' );
+		update_post_meta( $coupon_refuse, '_product_percentage_coupon_woo_refuse_without_discount', 'yes' );
+		// Edited through the admin UI by the tests
+		$coupon_edit = ppcw_e2e_coupon( 'ppcw-e2e-edit', '10' );
 
 		$products = array(
 			// 10% coupon default of 100.
@@ -129,7 +135,7 @@ switch ( $ppcw_e2e_args[0] ?? '' ) {
 			// 50% of the 80 sale price.
 			'sale'     => ppcw_e2e_product( 'sale 80 override 50', '100', '80', array( "_product_percentage_coupon_woo_active_{$coupon}" => 'yes', "_product_percentage_coupon_woo_amount_{$coupon}" => '50', "_product_percentage_coupon_woo_active_{$coupon_nosale}" => 'yes', "_product_percentage_coupon_woo_amount_{$coupon_nosale}" => '50' ) ),
 			// Not discounted.
-			'disabled' => ppcw_e2e_product( 'disabled', '100', '', array( "_product_percentage_coupon_woo_active_{$coupon}" => 'no' ) ),
+			'disabled' => ppcw_e2e_product( 'disabled', '100', '', array( "_product_percentage_coupon_woo_active_{$coupon}" => 'no', "_product_percentage_coupon_woo_active_{$coupon_refuse}" => 'no' ) ),
 			// Edited through the admin UI by the tests.
 			'edit'     => ppcw_e2e_product( 'edit in admin', '100' ),
 		);
@@ -184,6 +190,8 @@ switch ( $ppcw_e2e_args[0] ?? '' ) {
 				'coupons'  => array(
 					'main'   => array( 'id' => $coupon, 'code' => 'ppcw-e2e' ),
 					'nosale' => array( 'id' => $coupon_nosale, 'code' => 'ppcw-e2e-nosale' ),
+					'refuse' => array( 'id' => $coupon_refuse, 'code' => 'ppcw-e2e-refuse' ),
+					'edit'   => array( 'id' => $coupon_edit, 'code' => 'ppcw-e2e-edit' ),
 				),
 				'products' => $products,
 				'customer' => $customer,
@@ -230,6 +238,11 @@ switch ( $ppcw_e2e_args[0] ?? '' ) {
 				'amount' => $product->get_meta( "_product_percentage_coupon_woo_amount_{$coupon_id}" ),
 			)
 		);
+		break;
+
+	case 'coupon-meta':
+		$coupon = new WC_Coupon( absint( $ppcw_e2e_args[1] ?? 0 ) );
+		echo wp_json_encode( array( 'refuse' => $coupon->get_meta( '_product_percentage_coupon_woo_refuse_without_discount' ) ) );
 		break;
 
 	case 'reset-cart':

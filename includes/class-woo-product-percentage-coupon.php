@@ -23,6 +23,7 @@ final class Woo_Product_Percentage_Coupon {
 
 	/* Internal variables */
 	private $discount_type            = 'percent_per_product';
+	private $refuse_meta_key          = '_product_percentage_coupon_woo_refuse_without_discount';
 	private $mode                     = 'default';
 	private $products_magic_not_valid = array();
 	private $coupons                  = null;
@@ -72,8 +73,10 @@ final class Woo_Product_Percentage_Coupon {
 		add_filter( 'woocommerce_coupon_discount_types', array( $this, 'woocommerce_coupon_discount_types' ) );
 		add_filter( 'woocommerce_product_coupon_types', array( $this, 'woocommerce_product_coupon_types' ) );
 		add_action( 'woocommerce_coupon_options', array( $this, 'woocommerce_coupon_options' ), 10, 2 );
+		add_action( 'woocommerce_coupon_options_save', array( $this, 'woocommerce_coupon_options_save' ), 10, 2 );
 		add_filter( 'woocommerce_coupon_get_discount_amount', array( $this, 'woocommerce_coupon_get_discount_amount' ), 10, 5 );
 		add_filter( 'woocommerce_coupon_is_valid_for_product', array( $this, 'woocommerce_coupon_is_valid_for_product' ), 10, 3 );
+		add_filter( 'woocommerce_coupon_get_apply_quantity', array( $this, 'woocommerce_coupon_get_apply_quantity' ), 10, 3 );
 		// Custom product fields
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ), 20 );
 		add_filter( 'woocommerce_product_data_tabs', array( $this, 'woocommerce_product_data_tabs' ) );
@@ -152,7 +155,51 @@ final class Woo_Product_Percentage_Coupon {
 				</p>
 				<?php
 			}
+			// Shown only for our coupon type, by assets/js/admin-coupon.js
+			woocommerce_wp_checkbox(
+				array(
+					'id'            => 'product_percentage_coupon_woo_refuse_without_discount',
+					'label'         => __( 'Refuse without discount', 'product-percentage-coupon-woo' ),
+					'description'   => __( 'Refuse the coupon when no product in the cart gets a discount from it. Leave unticked to accept it anyway, for example to keep tracking orders with this coupon or to give free shipping.', 'product-percentage-coupon-woo' ),
+					'value'         => $this->refuses_without_discount( $coupon ) ? 'yes' : 'no',
+					'wrapper_class' => 'product_percentage_coupon_woo_coupon_field',
+				)
+			);
 		}
+	}
+
+	/**
+	 * Save the coupon's own settings.
+	 *
+	 * WooCommerce verifies the nonce and capabilities before firing this hook, after saving the coupon.
+	 *
+	 * @param int       $post_id Coupon ID.
+	 * @param WC_Coupon $coupon  Coupon object.
+	 */
+	public function woocommerce_coupon_options_save( $post_id, $coupon ) {
+		if ( ! is_a( $coupon, 'WC_Coupon' ) ) {
+			return;
+		}
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( $coupon->get_discount_type() === $this->discount_type && ! empty( $_POST['product_percentage_coupon_woo_refuse_without_discount'] ) ) {
+			$coupon->update_meta_data( $this->refuse_meta_key, 'yes' );
+		} else {
+			// Unticked is the default, so nothing is stored
+			$coupon->delete_meta_data( $this->refuse_meta_key );
+		}
+		$coupon->save();
+	}
+
+	/**
+	 * Whether the coupon is refused when no product in the cart gets a discount from it.
+	 *
+	 * Off by default, as in 1.3: the coupon is accepted with no discount, so it still tracks orders and gives free shipping.
+	 *
+	 * @param WC_Coupon $coupon Coupon object.
+	 * @return bool
+	 */
+	private function refuses_without_discount( $coupon ) {
+		return 'yes' === $coupon->get_meta( $this->refuse_meta_key );
 	}
 
 	/**
@@ -214,11 +261,10 @@ final class Woo_Product_Percentage_Coupon {
 	}
 
 	/**
-	 * Only count products that actually get a discount from our coupon type.
+	 * On coupons set to "Refuse without discount", only count products that actually get a discount.
 	 *
-	 * Products set to "No" (or left at 0%) would otherwise use up the coupon's
-	 * "Limit usage to X items" and make WooCommerce accept the coupon on a cart
-	 * where nothing is discounted.
+	 * Products set to "No" (or left at 0%) then make WooCommerce refuse the coupon on a cart
+	 * where nothing is discounted, with its own "not applicable" message.
 	 *
 	 * @param bool       $valid   Whether the coupon is valid for the product.
 	 * @param WC_Product $product Product or variation.
@@ -226,10 +272,25 @@ final class Woo_Product_Percentage_Coupon {
 	 * @return bool Whether the coupon is valid for the product.
 	 */
 	public function woocommerce_coupon_is_valid_for_product( $valid, $product, $coupon ) {
-		if ( $valid && is_a( $coupon, 'WC_Coupon' ) && $coupon->get_discount_type() === $this->discount_type && is_a( $product, 'WC_Product' ) ) {
+		if ( $valid && is_a( $coupon, 'WC_Coupon' ) && $coupon->get_discount_type() === $this->discount_type && is_a( $product, 'WC_Product' ) && $this->refuses_without_discount( $coupon ) ) {
 			$valid = $this->product_gets_discount( $coupon, $product );
 		}
 		return $valid;
+	}
+
+	/**
+	 * Products that get no discount do not use up the coupon's "Limit usage to X items".
+	 *
+	 * @param int       $apply_quantity Quantity of the item the coupon applies to.
+	 * @param object    $item           Cart or order item, as WC_Discounts builds it.
+	 * @param WC_Coupon $coupon         Coupon being applied.
+	 * @return int The quantity, 0 if the item is not discounted.
+	 */
+	public function woocommerce_coupon_get_apply_quantity( $apply_quantity, $item, $coupon ) {
+		if ( $apply_quantity > 0 && is_a( $coupon, 'WC_Coupon' ) && $coupon->get_discount_type() === $this->discount_type && isset( $item->product ) && is_a( $item->product, 'WC_Product' ) && ! $this->product_gets_discount( $coupon, $item->product ) ) {
+			return 0;
+		}
+		return $apply_quantity;
 	}
 
 	/**
@@ -457,16 +518,24 @@ final class Woo_Product_Percentage_Coupon {
 	}
 
 	/**
-	 * Add the product screen script and styles.
+	 * Add the coupon and product screen scripts and styles.
 	 *
-	 * Shows the percentage field only when its coupon is active, and styles the tab and variation fields.
+	 * On coupons, shows the plugin's setting only for our coupon type. On products, shows the
+	 * percentage field only when its coupon is active, and styles the tab and variation fields.
 	 */
 	public function admin_enqueue_scripts() {
 		$screen = get_current_screen();
-		if ( ! $screen || 'product' !== $screen->id || ! wp_script_is( 'wc-admin-product-meta-boxes', 'enqueued' ) ) {
+		if ( ! $screen ) {
 			return;
 		}
 		$plugin_url = plugin_dir_url( __DIR__ );
+		if ( 'shop_coupon' === $screen->id ) {
+			wp_enqueue_script( 'product-percentage-coupon-woo-admin-coupon', $plugin_url . 'assets/js/admin-coupon.js', array( 'jquery' ), $this->version, true );
+			return;
+		}
+		if ( 'product' !== $screen->id || ! wp_script_is( 'wc-admin-product-meta-boxes', 'enqueued' ) ) {
+			return;
+		}
 		wp_enqueue_script( 'product-percentage-coupon-woo-admin', $plugin_url . 'assets/js/admin-product.js', array( 'jquery', 'wc-admin-product-meta-boxes' ), $this->version, true );
 		wp_enqueue_style( 'product-percentage-coupon-woo-admin', $plugin_url . 'assets/css/admin-product.css', array( 'woocommerce_admin_styles' ), $this->version );
 	}

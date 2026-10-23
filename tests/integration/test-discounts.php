@@ -211,6 +211,58 @@ function ppcw_meta_count( $product_id ) {
 	return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE post_id = %d AND meta_key LIKE %s", $product_id, '_product_percentage_coupon_woo_%' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 }
 
+/**
+ * Save a coupon's plugin settings through the plugin's handler, as the coupon edit screen does.
+ *
+ * @param int   $coupon_id Coupon ID.
+ * @param array $posted    Posted fields.
+ */
+function ppcw_save_coupon( $coupon_id, $posted ) {
+	$_POST = $posted;
+	Woo_Product_Percentage_Coupon()->woocommerce_coupon_options_save( $coupon_id, new WC_Coupon( $coupon_id ) );
+	$_POST = array();
+}
+
+/**
+ * Whether a coupon in the cart gives free shipping, the check WooCommerce's free shipping method makes.
+ *
+ * @return bool
+ */
+function ppcw_cart_has_free_shipping_coupon() {
+	foreach ( WC()->cart->get_coupons() as $cart_coupon ) {
+		if ( $cart_coupon->is_valid() && $cart_coupon->get_free_shipping() ) {
+			return true;
+		}
+	}
+	return false;
+}
+
+/**
+ * Create an order with items and apply a coupon from the admin, keeping the result.
+ *
+ * @param array  $items Array of array( product_id, quantity, variation_id ).
+ * @param string $code  Coupon code.
+ * @return array( result, codes, discount )
+ */
+function ppcw_order_apply( $items, $code ) {
+	global $ppcw_created;
+	$order = wc_create_order();
+	foreach ( $items as $item ) {
+		$order->add_product( wc_get_product( $item[2] ?? $item[0] ), $item[1] );
+	}
+	$order->set_billing_country( WC()->countries->get_base_country() );
+	$order->calculate_totals();
+	$result = $order->apply_coupon( $code );
+	$order->save();
+	$ppcw_created['orders'][] = $order->get_id();
+	$order                    = wc_get_order( $order->get_id() );
+	return array(
+		'result'   => $result,
+		'codes'    => $order->get_coupon_codes(),
+		'discount' => (float) $order->get_discount_total() + (float) $order->get_discount_tax(),
+	);
+}
+
 WP_CLI::log( 'WordPress ' . get_bloginfo( 'version' ) . ', WooCommerce ' . WC_VERSION . ', PHP ' . PHP_VERSION . ', HPOS ' . ( wc_get_container()->get( Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController::class )->custom_orders_table_usage_is_enabled() ? 'on' : 'off' ) );
 
 try {
@@ -331,9 +383,40 @@ try {
 	$p_limit_no  = ppcw_simple_product( 'limit no 200', '200', '', array( "_product_percentage_coupon_woo_active_{$l}" => 'no' ) );
 	$p_limit_yes = ppcw_simple_product( 'limit yes 100', '100' );
 	ppcw_assert_amount( '"Limit usage to 1 item": a dearer "No" product does not use up the limit', 10, ppcw_cart_discount( array( array( $p_limit_no->get_id(), 1 ), array( $p_limit_yes->get_id(), 1 ) ), 'ppcw-test-limit' )[0] );
+
+	WP_CLI::log( '' );
+	WP_CLI::log( 'Cart with nothing discounted, default (as in 1.3): the coupon is accepted with no discount:' );
 	list( $discount, $applied, $notices ) = ppcw_cart_discount( array( array( $p_disabled->get_id(), 1 ) ), 'ppcw-test-a' );
+	ppcw_assert_true( 'Cart with only a "No" product accepts the coupon, 0 off', $applied && 0.0 === (float) $discount && in_array( 'ppcw-test-a', WC()->cart->get_applied_coupons(), true ), 'applied=' . var_export( $applied, true ) . ' discount=' . $discount . ' ' . implode( ' | ', $notices ) );
+	$coupon_fs = ppcw_coupon( 'ppcw-test-freeship', '10' );
+	$coupon_fs->set_free_shipping( true );
+	$coupon_fs->save();
+	$p_fs_no = ppcw_simple_product( 'free shipping no', '100', '', array( '_product_percentage_coupon_woo_active_' . $coupon_fs->get_id() => 'no' ) );
+	list( $discount, $applied ) = ppcw_cart_discount( array( array( $p_fs_no->get_id(), 1 ) ), 'ppcw-test-freeship' );
+	ppcw_assert_true( 'A coupon that gives free shipping still gives it on that cart', $applied && ppcw_cart_has_free_shipping_coupon(), 'applied=' . var_export( $applied, true ) );
+	$order_result = ppcw_order_apply( array( array( $p_disabled->get_id(), 1 ) ), 'ppcw-test-a' );
+	ppcw_assert_true( 'The order records the coupon with 0 off, for tracking', true === $order_result['result'] && in_array( 'ppcw-test-a', $order_result['codes'], true ) && 0.0 === $order_result['discount'], wp_json_encode( $order_result ) );
+
+	WP_CLI::log( '' );
+	WP_CLI::log( 'Coupon set to "Refuse without discount":' );
+	$coupon_refuse = ppcw_coupon( 'ppcw-test-refuse', '10' );
+	$coupon_refuse->set_free_shipping( true );
+	$coupon_refuse->save();
+	ppcw_save_coupon( $coupon_refuse->get_id(), array( 'product_percentage_coupon_woo_refuse_without_discount' => 'yes' ) );
+	ppcw_assert_true( 'Ticking the setting on the coupon screen stores it', 'yes' === ( new WC_Coupon( $coupon_refuse->get_id() ) )->get_meta( '_product_percentage_coupon_woo_refuse_without_discount' ) );
+	$r       = $coupon_refuse->get_id();
+	$p_ref_n = ppcw_simple_product( 'refuse no', '100', '', array( "_product_percentage_coupon_woo_active_{$r}" => 'no' ) );
+	list( $discount, $applied, $notices ) = ppcw_cart_discount( array( array( $p_ref_n->get_id(), 1 ) ), 'ppcw-test-refuse' );
 	ppcw_assert_true( 'Cart with only a "No" product refuses the coupon', ! $applied && 0.0 === (float) $discount, 'applied=' . var_export( $applied, true ) . ' discount=' . $discount );
 	ppcw_assert_true( 'Shows WooCommerce\'s own "not applicable" notice', (bool) preg_grep( '/not applicable/i', $notices ), implode( ' | ', $notices ) );
+	ppcw_assert_true( 'and gives no free shipping', ! ppcw_cart_has_free_shipping_coupon() );
+	ppcw_assert_amount( 'A mixed cart still gets the discount on the other product (10)', 10, ppcw_cart_discount( array( array( $p_ref_n->get_id(), 1 ), array( $p_default->get_id(), 1 ) ), 'ppcw-test-refuse' )[0] );
+	$order_result = ppcw_order_apply( array( array( $p_ref_n->get_id(), 1 ) ), 'ppcw-test-refuse' );
+	ppcw_assert_true( 'Applying it to such an order from the admin is refused', is_wp_error( $order_result['result'] ), wp_json_encode( $order_result ) );
+	ppcw_save_coupon( $coupon_refuse->get_id(), array() );
+	ppcw_assert_true( 'Unticking the setting removes it', '' === ( new WC_Coupon( $coupon_refuse->get_id() ) )->get_meta( '_product_percentage_coupon_woo_refuse_without_discount' ) );
+	ppcw_save_coupon( $coupon->get_id(), array( 'product_percentage_coupon_woo_refuse_without_discount' => 'yes' ) );
+	ppcw_save_coupon( $coupon->get_id(), array() );
 
 	WP_CLI::log( '' );
 	WP_CLI::log( 'Percentages with decimals, on a store using a comma as decimal separator:' );

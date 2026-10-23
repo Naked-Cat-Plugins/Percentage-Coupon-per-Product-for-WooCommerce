@@ -45,14 +45,19 @@ async function applyCoupon( page, code ) {
 
 const discountRow = ( page ) => page.locator( '.wc-block-components-totals-discount .wc-block-components-totals-item__value' );
 
+// The block cart re-renders the totals after each Store API response, so wait for the value to settle.
+async function expectDiscount( page, amount ) {
+	await expect( discountRow( page ) ).toBeVisible();
+	await expect.poll( async () => money( await discountRow( page ).innerText() ) ).toBe( amount );
+}
+
 test.describe( 'Block cart and checkout', () => {
 	test( 'one coupon, different percentage per product, sale price included', async ( { page } ) => {
 		const { products, coupons } = fixtures();
 		// 10 (coupon default) + 25 (product) + 40 (50% of the 80 sale price) + 0 (disabled) + 30 (variation) = 105.
 		await fillCart( page, [ products.default, products.override, products.sale, products.disabled, products.variation_M ] );
 		await applyCoupon( page, coupons.main.code );
-		await expect( discountRow( page ) ).toBeVisible();
-		expect( money( await discountRow( page ).innerText() ) ).toBe( 105 );
+		await expectDiscount( page, 105 );
 	} );
 
 	test( 'order placed through the block checkout keeps the per product discounts', async ( { page } ) => {
@@ -63,8 +68,7 @@ test.describe( 'Block cart and checkout', () => {
 
 		await page.goto( CHECKOUT_URL );
 		await expect( page.locator( '.wc-block-components-checkout-place-order-button' ) ).toBeVisible();
-		await expect( discountRow( page ) ).toBeVisible();
-		expect( money( await discountRow( page ).innerText() ) ).toBe( 105 );
+		await expectDiscount( page, 105 );
 
 		// Required fields added by other plugins on a dev install.
 		for ( const input of await page.locator( '.wc-block-checkout input[required][type="text"], .wc-block-checkout input[required]:not([type])' ).all() ) {
@@ -99,10 +103,20 @@ test.describe( 'Block cart and checkout', () => {
 		await expect( discountRow( page ) ).toHaveCount( 0 );
 	} );
 
-	test( 'coupon is refused on a cart of products set to "No" only', async ( { page } ) => {
+	test( 'by default, a cart of products set to "No" only keeps the coupon with no discount', async ( { page } ) => {
 		const { products, coupons } = fixtures();
 		await fillCart( page, [ products.disabled ] );
 		await applyCoupon( page, coupons.main.code );
+		// The coupon stays on the cart; the block cart shows no amount for a 0 discount.
+		await expect( page.locator( '.wc-block-components-totals-discount' ) ).toContainText( coupons.main.code );
+		await expect( page.getByRole( 'button', { name: `Remove coupon "${ coupons.main.code }"` } ) ).toBeVisible();
+		await expect( discountRow( page ) ).toHaveCount( 0 );
+	} );
+
+	test( 'coupon set to "Refuse without discount" is refused on a cart of products set to "No" only', async ( { page } ) => {
+		const { products, coupons } = fixtures();
+		await fillCart( page, [ products.disabled ] );
+		await applyCoupon( page, coupons.refuse.code );
 		await expect( page.locator( '.wc-block-components-totals-coupon' ) ).toContainText( /not applicable/i );
 		await expect( discountRow( page ) ).toHaveCount( 0 );
 	} );
@@ -111,8 +125,7 @@ test.describe( 'Block cart and checkout', () => {
 		const { products, coupons } = fixtures();
 		await fillCart( page, [ products.sale, products.default ] );
 		await applyCoupon( page, coupons.nosale.code );
-		await expect( discountRow( page ) ).toBeVisible();
-		expect( money( await discountRow( page ).innerText() ) ).toBe( 10 );
+		await expectDiscount( page, 10 );
 	} );
 } );
 
@@ -141,7 +154,24 @@ test.describe( 'Product settings', () => {
 		await page.context().clearCookies();
 		await fillCart( page, [ products.edit ] );
 		await applyCoupon( page, coupons.main.code );
-		await expect( discountRow( page ) ).toBeVisible();
-		expect( money( await discountRow( page ).innerText() ) ).toBe( 12.5 );
+		await expectDiscount( page, 12.5 );
+	} );
+
+	test( '"Refuse without discount" shows only for this coupon type and is saved', async ( { page } ) => {
+		const { coupons, admin } = fixtures();
+		await login( page, admin );
+		await page.goto( `/wp-admin/post.php?post=${ coupons.edit.id }&action=edit` );
+		const setting = page.locator( '#product_percentage_coupon_woo_refuse_without_discount' );
+		await expect( setting ).toBeVisible();
+		await expect( setting ).not.toBeChecked();
+		await page.locator( 'select#discount_type' ).selectOption( 'percent' );
+		await expect( setting ).toBeHidden();
+		await page.locator( 'select#discount_type' ).selectOption( 'percent_per_product' );
+		await expect( setting ).toBeVisible();
+		await setting.check();
+		await page.locator( '#publish' ).click();
+		await expect( page.locator( '#message.updated, .notice-success' ).first() ).toBeVisible();
+		expect( wp( 'coupon-meta', coupons.edit.id ) ).toEqual( { refuse: 'yes' } );
+		await expect( page.locator( '#product_percentage_coupon_woo_refuse_without_discount' ) ).toBeChecked();
 	} );
 } );
