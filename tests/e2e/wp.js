@@ -18,4 +18,7 @@ function wp( ...args ) {
 	return JSON.parse( json );
 }
 
-module.exports = { wp };
+// Must-use plugin active only while the tests run (see mu-plugin.php).
+const MU_PLUGIN = path.join( WP_PATH, 'wp-content', 'mu-plugins', 'ppcw-e2e-no-async-runner.php' );
+
+module.exports = { wp, WP_PATH, MU_PLUGIN };

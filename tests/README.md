@@ -27,4 +27,6 @@ npx playwright test
 
 Environment variables, all optional: `BASE_URL` (default `https://wordpress.local`), `CART_URL` (default `/carrinho/`), `CHECKOUT_URL` (default `/checkout-blocks-2/`), `WP_PATH` (default: the install this plugin lives in), `PPCW_KEEP_FIXTURES=1` to leave the test data in place after a run.
 
+While the tests run, `mu-plugin.php` is copied to `wp-content/mu-plugins/` and removed at the end. It stops Action Scheduler's async queue runner from starting off the test users' requests: the runner carries the shopper's cookies and saves an older copy of their cart when its batch ends, which made the tests lose cart items at random.
+
 The checkout test needs the bank transfer (BACS) gateway enabled. To cover both order storage modes, run the suites once with HPOS on and once with it off (`wp wc hpos enable` / `wp wc hpos disable`).
