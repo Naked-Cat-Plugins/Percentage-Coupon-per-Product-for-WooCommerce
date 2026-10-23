@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Product Percentage Coupon Woo\n"
-"POT-Creation-Date: 2025-06-13 17:59+0100\n"
+"POT-Creation-Date: 2026-10-23 10:12+0100\n"
 "PO-Revision-Date: 2020-08-06 12:48+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -19,12 +19,14 @@ msgstr ""
 "__;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
+"X-Poedit-SearchPathExcluded-1: tests\n"
+"X-Poedit-SearchPathExcluded-2: node_modules\n"
 
-#: includes/class-woo-product-percentage-coupon.php:104
+#: includes/class-woo-product-percentage-coupon.php:120
 msgid "Percentage discount (per product)"
 msgstr ""
 
-#: includes/class-woo-product-percentage-coupon.php:137
+#: includes/class-woo-product-percentage-coupon.php:153
 msgid ""
 "A “Percentage discount (per product)” coupon works just like a regular "
 "“Percentage discount” coupon, setting the default discount at the percentage "
@@ -32,77 +34,88 @@ msgid ""
 "product."
 msgstr ""
 
-#: includes/class-woo-product-percentage-coupon.php:359
-#: includes/class-woo-product-percentage-coupon.php:574
+#: includes/class-woo-product-percentage-coupon.php:162
+msgid "Refuse without discount"
+msgstr ""
+
+#: includes/class-woo-product-percentage-coupon.php:163
+msgid ""
+"Refuse the coupon when no product in the cart gets a discount from it. Leave "
+"unticked to accept it anyway, for example to keep tracking orders with this "
+"coupon or to give free shipping."
+msgstr ""
+
+#: includes/class-woo-product-percentage-coupon.php:512
+#: includes/class-woo-product-percentage-coupon.php:747
 msgid "Percentage discount coupons"
 msgstr ""
 
-#: includes/class-woo-product-percentage-coupon.php:379
+#: includes/class-woo-product-percentage-coupon.php:555
 msgid ""
 "The fields below are used to set custom percentage discounts for “Percentage "
 "discount (per product)” coupons <span class=\"show_if_variable\">and might "
 "be overridden at the variations settings</span>"
 msgstr ""
 
-#: includes/class-woo-product-percentage-coupon.php:390
-#: includes/class-woo-product-percentage-coupon.php:588
+#: includes/class-woo-product-percentage-coupon.php:566
+#: includes/class-woo-product-percentage-coupon.php:761
 msgid "Activate coupon discount (%)"
 msgstr ""
 
-#: includes/class-woo-product-percentage-coupon.php:392
-#: includes/class-woo-product-percentage-coupon.php:425
-#: includes/class-woo-product-percentage-coupon.php:591
-#: includes/class-woo-product-percentage-coupon.php:629
+#: includes/class-woo-product-percentage-coupon.php:568
+#: includes/class-woo-product-percentage-coupon.php:601
+#: includes/class-woo-product-percentage-coupon.php:764
+#: includes/class-woo-product-percentage-coupon.php:802
 msgid "Yes"
 msgstr ""
 
-#: includes/class-woo-product-percentage-coupon.php:393
-#: includes/class-woo-product-percentage-coupon.php:426
+#: includes/class-woo-product-percentage-coupon.php:569
+#: includes/class-woo-product-percentage-coupon.php:602
 msgid "No"
 msgstr ""
 
-#: includes/class-woo-product-percentage-coupon.php:401
-#: includes/class-woo-product-percentage-coupon.php:601
+#: includes/class-woo-product-percentage-coupon.php:577
+#: includes/class-woo-product-percentage-coupon.php:774
 msgid "Coupon discount (%)"
 msgstr ""
 
-#: includes/class-woo-product-percentage-coupon.php:402
-#: includes/class-woo-product-percentage-coupon.php:602
+#: includes/class-woo-product-percentage-coupon.php:578
+#: includes/class-woo-product-percentage-coupon.php:775
 msgid "Coupon default"
 msgstr ""
 
 #. translators: %s is the coupon code
-#: includes/class-woo-product-percentage-coupon.php:421
-#: includes/class-woo-product-percentage-coupon.php:624
+#: includes/class-woo-product-percentage-coupon.php:597
+#: includes/class-woo-product-percentage-coupon.php:797
 #, php-format
 msgid "Activate “%s” discount (%%)"
 msgstr ""
 
 #. translators: %s is the coupon code
-#: includes/class-woo-product-percentage-coupon.php:436
-#: includes/class-woo-product-percentage-coupon.php:641
+#: includes/class-woo-product-percentage-coupon.php:612
+#: includes/class-woo-product-percentage-coupon.php:814
 #, php-format
 msgid "“%s” discount (%%)"
 msgstr ""
 
-#: includes/class-woo-product-percentage-coupon.php:450
-#: includes/class-woo-product-percentage-coupon.php:657
+#: includes/class-woo-product-percentage-coupon.php:626
+#: includes/class-woo-product-percentage-coupon.php:830
 msgid "There are no “Percentage discount (per product)” coupons yet."
 msgstr ""
 
-#: includes/class-woo-product-percentage-coupon.php:577
+#: includes/class-woo-product-percentage-coupon.php:750
 msgid ""
 "The fields below are used to set custom percentage discounts for “Percentage "
 "discount (per product)” coupons and will override the product level settings"
 msgstr ""
 
-#: includes/class-woo-product-percentage-coupon.php:590
-#: includes/class-woo-product-percentage-coupon.php:628
+#: includes/class-woo-product-percentage-coupon.php:763
+#: includes/class-woo-product-percentage-coupon.php:801
 msgid "No (inherit from product)"
 msgstr ""
 
 #. translators: %s is the required WooCommerce version
-#: product-percentage-coupon-woo.php:72
+#: product-percentage-coupon-woo.php:70
 #, php-format
 msgid ""
 "<strong>Percentage Coupon per Product for WooCommerce</strong> is installed "

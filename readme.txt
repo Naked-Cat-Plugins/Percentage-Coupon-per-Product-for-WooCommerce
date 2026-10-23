@@ -18,8 +18,14 @@ You can also set the specific discount at the product variation level (defaults 
 
 = Features: =
 
-* One coupon: several percentage discounts
-* That’s it for now
+* One coupon, several percentage discounts: the coupon’s percentage is the default, and each product can have its own
+* Percentages per variation, or inherited from the product
+* Leave a product out of a coupon by setting it to “No”
+* Discounts on products on sale are calculated on the sale price, unless the coupon has “Exclude sale items” ticked
+* Works with WooCommerce’s own coupon settings: product and category restrictions, minimum and maximum spend, usage limits, “Limit usage to X items” and free shipping
+* Optional “Refuse without discount” setting, to refuse the coupon when no product in the cart gets a discount from it
+* Percentages with decimals, typed with your shop’s decimal separator
+* Integrates with [Magic URL Coupon for WooCommerce](https://wordpress.org/plugins/magic-coupon/) and Invoicing with InvoiceXpress for WooCommerce (Pro)
 
 = PRO add-on (soon to be released) features: =
 
@@ -38,6 +44,28 @@ Already know our other WooCommerce (premium) plugins?
 Header photo by [Artem Beliaikin](https://unsplash.com/photos/49mCO5ZRQDk).
 
 == Frequently Asked Questions ==
+
+= How do I set a different percentage for a product? =
+
+Create a coupon with the “Percentage discount (per product)” discount type first. Then edit the product and open the “Percentage discount coupons” tab: each coupon of that type has its own setting there. Leave the percentage empty to use the coupon’s, type a percentage to override it, or set the product to “No” to leave it out of that coupon.
+
+For variable products, each variation has the same settings below its other fields. “No (inherit from product)” uses the product’s setting.
+
+= How do I apply a coupon only to the products I choose? =
+
+Use WooCommerce’s own “Usage restriction > Products” field on the coupon and list the products it is for. Those get their own percentage, or the coupon’s if they have none, and every other product gets nothing.
+
+Or set the coupon’s amount to 0% and give the products you want their own percentage. Only those are discounted.
+
+= Does the discount apply to products on sale? =
+
+Yes, calculated on the sale price. To leave products on sale out, tick “Exclude sale items” on the coupon’s “Usage restriction” tab.
+
+= What happens when no product in the cart gets a discount? =
+
+By default the coupon is accepted with no discount, as with any WooCommerce coupon. The order still records it, so you can keep tracking orders with it, and a coupon with “Allow free shipping” ticked still gives free shipping.
+
+To refuse the coupon on those carts instead, tick “Refuse without discount” on the coupon. WooCommerce then shows its “not applicable to selected products” message.
 
 = Is this plugin compatible with the new WooCommerce High-Performance Order Storage? =
 
