@@ -8,10 +8,10 @@
  * Author URI:           https://nakedcatplugins.com
  * Text Domain:          product-percentage-coupon-woo
  * Requires at least:    5.8
- * Tested up to:         6.9
+ * Tested up to:         7.1
  * Requires PHP:         7.4
  * WC requires at least: 7.1
- * WC tested up to:      9.9
+ * WC tested up to:      11.2
  * Requires Plugins:     woocommerce
  * License:              GPLv3
  **/

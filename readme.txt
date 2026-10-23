@@ -2,7 +2,7 @@
 Contributors: nakedcatplugins, webdados
 Tags: woocommerce, coupon, discount, marketing
 Requires at least: 5.8
-Tested up to: 6.9
+Tested up to: 7.1
 Requires PHP: 7.4
 Stable tag: 1.3
 License: GPLv3
@@ -72,6 +72,7 @@ Sure. Go to [GlotPress](https://translate.wordpress.org/projects/wp-plugins/prod
 * [FIX] Products set to “No” for a coupon no longer use up its “Limit usage to X items” allowance
 * [FIX] Magic URL Coupon for WooCommerce integration: when the coupon’s own discount is 0%, products without a percentage of their own are no longer treated as eligible for it
 * [DEV] Requires PHP 7.4
+* [DEV] Tested up to WordPress 7.2-alpha-64319 and WooCommerce 11.2.1
 
 = 1.3 - 2025-06-13 =
 * [NEW] We are now called Naked Cat Plugins 😻
