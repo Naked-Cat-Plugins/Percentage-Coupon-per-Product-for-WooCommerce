@@ -4,7 +4,7 @@ Tags: woocommerce, coupon, discount, marketing
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.3
+Stable tag: 1.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -93,7 +93,7 @@ Sure. Go to [GlotPress](https://translate.wordpress.org/projects/wp-plugins/prod
 
 == Changelog ==
 
-= TBA =
+= 1.4 - 2026-10-26 =
 * [NEW] “Refuse without discount” option on “Percentage discount (per product)” coupons, to refuse the coupon when no product in the cart gets a discount from it (off by default, so coupons keep working as before)
 * [TWEAK] Faster product editing, and less data stored for each product, when the shop has many “Percentage discount (per product)” coupons
 * [FIX] Percentages with decimals set on a product or variation, such as 12,5%, lost their decimals on shops that use a comma as the decimal separator

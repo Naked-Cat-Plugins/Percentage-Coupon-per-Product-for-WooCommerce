@@ -3,7 +3,7 @@
  * Plugin Name:          Percentage Coupon per Product for WooCommerce
  * Plugin URI:
  * Description:          Create WooCommerce coupons with variable discount percentage per product
- * Version:              1.3
+ * Version:              1.4
  * Author:               Naked Cat Plugins (by Webdados)
  * Author URI:           https://nakedcatplugins.com
  * Text Domain:          product-percentage-coupon-woo
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Keep in sync with the "Version" and "WC requires at least" headers above
-define( 'PCPW_VERSION', '1.3' );
+define( 'PCPW_VERSION', '1.4' );
 define( 'PCPW_WC_REQ_VERSION', '7.1' );
 
 /**
