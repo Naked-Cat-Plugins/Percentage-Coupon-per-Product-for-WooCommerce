@@ -38,7 +38,7 @@ Already know our other WooCommerce (premium) plugins?
 
 * [EU Guarantee Notice and GARAN Label for WordPress and WooCommerce](https://nakedcatplugins.com/product/eu-guarantee-notice-and-garan-label-for-wordpress-and-woocommerce/) - Show the mandatory EU guarantee notice and the EU GARAN label with the official European Commission artwork, and let Proof of Notice check every day that the notice is still on your site
 * [Shop as Client for WooCommerce](https://nakedcatplugins.com/product/shop-as-client-for-woocommerce-pro-add-on/) - Quickly create orders on behalf of your customers
-* [Taxonomy/Term and Role based Discounts for WooCommerce](https://nakedcatplugins.com/product/taxonomy-term-and-role-based-discounts-for-woocommerce-pro-add-on/) - Easily create bulk discount rules for products based on any taxonomy terms (built-in or custom)
+* [Taxonomy/Term and Role-based Discounts for WooCommerce](https://nakedcatplugins.com/product/taxonomy-term-and-role-based-discounts-for-woocommerce-pro-add-on/) - Easily create bulk discount rules for products based on any taxonomy terms (built-in or custom)
 * [Simple WooCommerce Order Approval](https://nakedcatplugins.com/product/simple-woocommerce-order-approval/) - The hassle-free solution for WooCommerce order approval before payment
 
 Header photo by [Artem Beliaikin](https://unsplash.com/photos/49mCO5ZRQDk).
@@ -79,7 +79,7 @@ Yes.
 
 This is a free plugin. It’s our way of giving back to the wonderful WordPress community.
 
-There’s a support tab on the top of this page, where you can ask the community for help. We’ll try to keep an eye on the forums but we cannot promise to answer support tickets.
+There’s a support tab at the top of this page, where you can ask the community for help. We’ll try to keep an eye on the forums, but we cannot promise to answer support tickets.
 
 If you reach us by email or any other direct contact method, we’ll assume you need premium, paid-for support.
 
