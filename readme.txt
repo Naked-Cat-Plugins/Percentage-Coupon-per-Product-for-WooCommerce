@@ -67,11 +67,11 @@ By default the coupon is accepted with no discount, as with any WooCommerce coup
 
 To refuse the coupon on those carts instead, tick “Refuse without discount” on the coupon. WooCommerce then shows its “not applicable to selected products” message.
 
-= Is this plugin compatible with the new WooCommerce High-Performance Order Storage? =
+= Is this plugin compatible with WooCommerce High-Performance Order Storage? =
 
 Yes.
 
-= Is this plugin compatible with the new WooCommerce block-based Cart and Checkout? =
+= Is this plugin compatible with the WooCommerce block-based Cart and Checkout? =
 
 Yes.
 
