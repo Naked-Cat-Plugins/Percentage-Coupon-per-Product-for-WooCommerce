@@ -85,7 +85,7 @@ If you reach us by email or any other direct contact method, we’ll assume you 
 
 = Where do I report security vulnerabilities found in this plugin? =  
  
-You can report any security bugs found in the source code of this plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/product-percentage-coupon-woo). The Patchstack team will assist you with verification, CVE assignment and take care of notifying the developers of this plugin.
+You can report any security bugs found in the source code of this plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/9e5fbb52-90be-4dd6-a9dd-c117331cd492). The Patchstack team will assist you with verification, CVE assignment and take care of notifying the developers of this plugin.
 
 = Can I contribute with a translation? =
 
