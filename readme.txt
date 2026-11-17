@@ -25,7 +25,7 @@ You can also set the specific discount at the product variation level (defaults 
 * Works with WooCommerce’s own coupon settings: product and category restrictions, minimum and maximum spend, usage limits, “Limit usage to X items” and free shipping
 * Optional “Refuse without discount” setting, to refuse the coupon when no product in the cart gets a discount from it
 * Percentages with decimals, typed with your shop’s decimal separator
-* Integrates with [Magic URL Coupon for WooCommerce](https://wordpress.org/plugins/magic-coupon/) and Invoicing with InvoiceXpress for WooCommerce (Pro)
+* Integrates with [Magic URL Coupon for WooCommerce](https://wordpress.org/plugins/magic-coupon/) and [Invoicing with InvoiceXpress for WooCommerce – Pro](https://invoicewoo.com/)
 
 = PRO add-on (soon to be released) features: =
 
